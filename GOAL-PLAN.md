@@ -1,4 +1,4 @@
-# GOAL-PLAN: EMI 1.20.1 fork 适配 JEI 15.62 运行时
+# GOAL-PLAN: LMaxs EMI Fork(EMI 1.20.1 fork)适配 JEI 15.62 运行时
 
 ## 任务
 修复 LMax-1.20 分支上的 AbstractMethodError(用户在玩 MC,离场,授权自行推进)。
@@ -28,7 +28,7 @@
 - B: 退一步只补 getAllIngredientsList 等最小集合,保持 15.20 编译 —— 地鼠模式,仅当 A 工程量失控时向用户报备后启用
 
 ## 环境备忘
-- 工作目录 D:\Documents\mcmod\emi-Fork,分支 LMax-1.20(tip 4df0c567)
+- 工作目录 D:\Documents\mcmod\LMaxs-EMI-Fork(2026-10-18 更名),分支 LMax-1.20(现 tip 8e461fe6)
 - 终端 pwsh 7.7.0-preview.3;exec 一律代码块格式(教训见长期记忆 003)
 - read 用行号模式(剪贴板模式会丢换行)
 - JEI maven: maven.blamejared.com, group mezz.jei
@@ -172,6 +172,24 @@
 - 发版: mod_version 1124.1 -> 1124.2;RELEASE=1 gradlew.bat build(fabric+forge 双 jar);
   commit(排除 .agent) -> push origin LMax-1.20 -> gh release create 1124.2+1.20.1
   (显式 --repo 指向本 fork 并 --target LMax-1.20,先 git remote -v 防打错仓库;
-  notes 覆盖 1124.1 桥方法 + 1124.2 滚动格两项,1124.1 从未发过 release)
+notes 只描述滚动格修复;勘误:1124.1 实际已于 2026-10-07 发布过(tag 1124.1),初版 notes 误称其未单独发布,已于当日修正)
 - 已知限制(写入 release notes): EMI 配方界面无滚动条,超出滚动格可见容量的槽位顺序向下延伸;
   大标签配方溢出部分不可见
+
+- 状态: 已完成并发布 (2026-10-18, commit 26abcffa, release 1124.2+1.20.1)
+  待实机验证: CrockPot 猪灵以物易物配方网格布局 + 槽框 + 一次性日志
+## 任务3 2026-10-18(项目更名 LMaxs EMI Fork)
+- 动机: max 确立 fork 项目统一命名样式 LMaxs + 原项目名 + Fork(无撇号),仓库与产物同步更名
+- 四层改动:
+  1) 仓库层: gh repo rename -> LMaxRouterCN/LMaxs-EMI-Fork(旧 URL 自动重定向),本地 origin set-url 同步
+  2) 构建层: gradle.properties archives_base_name emi -> lmaxs-emi-fork(jar 全小写连字符)
+  3) 元数据层: forge mods.toml displayName 与 xplat fabric.mod.json name -> LMaxs EMI Fork;
+     mod id 恒为 emi(红线: JEMI 桥/兼容检测/配置/存档全锚定 id,不随更名变)
+  4) 文档层: README 标题;上游 maven 坐标文档保留(fork 惯例);authors=Emi 保留原作者署名
+- commit 8e461fe6(4 文件 4 行,原子更名)
+- release 1124.2+1.20.1 同步: 删旧 emi-* 资产,RELEASE=1 重建上传 lmaxs-emi-fork-* 双 jar;
+  title 与 notes 更名,notes 以远端 body 为基准改(1124.1 链接 repo 段同修),
+  API 旁路五断言全绿(body 781 字符);notes 注明旧名 jar 功能相同无需重下
+- 工作目录: D:\Documents\mcmod\LMaxs-EMI-Fork(max 手动更名,框架已跟随)
+- 待 max 决策: .agent/ 记忆文件被 git 追踪,是否 gitignore 或有意为之
+- 状态: 已完成 (2026-10-18, commit 8e461fe6, release 资产已替换)
