@@ -1,8 +1,8 @@
 {
-  "next_id": 7,
+  "next_id": 13,
   "memory": {
     "1": {
-      "temp": 20.390682574579035,
+      "temp": 3.94990939064379,
       "initial_temp": 100,
       "tags": [
         "环境",
@@ -15,7 +15,7 @@
       "last_accessed": 1791158814.812679
     },
     "2": {
-      "temp": 25.034408974245494,
+      "temp": 4.849452524942308,
       "initial_temp": 100,
       "tags": [
         "项目",
@@ -30,7 +30,7 @@
       "last_accessed": 1791159001.354268
     },
     "3": {
-      "temp": 34.05616262881148,
+      "temp": 6.5970698177871885,
       "initial_temp": 100,
       "tags": [
         "PokerAgent",
@@ -43,7 +43,7 @@
       "last_accessed": 1791226575.1669493
     },
     "4": {
-      "temp": 46.3291230159753,
+      "temp": 8.97448319308507,
       "initial_temp": 100,
       "tags": [
         "EMI",
@@ -57,7 +57,7 @@
       "last_accessed": 1791229920.393493
     },
     "5": {
-      "temp": 54.03600876626366,
+      "temp": 10.467395472325496,
       "initial_temp": 100,
       "tags": [
         "EMI",
@@ -73,7 +73,7 @@
       "last_accessed": 1791231267.3228006
     },
     "6": {
-      "temp": 100,
+      "temp": 19.371148445850082,
       "initial_temp": 100,
       "tags": [
         "EMI",
@@ -84,6 +84,91 @@
       "pin": false,
       "created_at": 1791236071.4081702,
       "last_accessed": 1791236071.4081702
+    },
+    "7": {
+      "temp": 20.390682574579035,
+      "initial_temp": 100,
+      "tags": [
+        "MC整合包环境",
+        "报错诊断",
+        "EMI"
+      ],
+      "pin": false,
+      "created_at": 1791473530.465196,
+      "last_accessed": 1791473530.4651961
+    },
+    "8": {
+      "temp": 44.012666865176534,
+      "initial_temp": 100,
+      "tags": [
+        "gh",
+        "fork",
+        "EMI-Fork",
+        "工作流",
+        "教训",
+        "环境"
+      ],
+      "pin": false,
+      "created_at": 1792296409.3632236,
+      "last_accessed": 1792296409.3632238
+    },
+    "9": {
+      "temp": 54.03600876626366,
+      "initial_temp": 100,
+      "tags": [
+        "教训",
+        "gh",
+        "fork",
+        "EMI-Fork",
+        "工作流"
+      ],
+      "pin": false,
+      "created_at": 1792297031.6305707,
+      "last_accessed": 1792297031.6305711
+    },
+    "10": {
+      "temp": 61.44931744814939,
+      "initial_temp": 100,
+      "tags": [
+        "教训",
+        "gh",
+        "exec",
+        "PokerAgent",
+        "工作流",
+        "EMI-Fork",
+        "解析器"
+      ],
+      "pin": false,
+      "created_at": 1792297309.6469693,
+      "last_accessed": 1792297770.955516
+    },
+    "11": {
+      "temp": 66.34204312890623,
+      "initial_temp": 100,
+      "tags": [
+        "用户偏好",
+        "命名",
+        "fork",
+        "版本习惯",
+        "项目"
+      ],
+      "pin": false,
+      "created_at": 1792302447.377222,
+      "last_accessed": 1792302447.3772223
+    },
+    "12": {
+      "temp": 77.37809374999999,
+      "initial_temp": 100,
+      "tags": [
+        "解析器",
+        "PokerAgent",
+        "replace",
+        "exec",
+        "教训"
+      ],
+      "pin": false,
+      "created_at": 1792303552.091509,
+      "last_accessed": 1792303552.0915105
     }
   }
 }

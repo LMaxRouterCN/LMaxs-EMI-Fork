@@ -1,6 +1,6 @@
-【任务·完成】修AbstractMethodError全链闭环:max离场授权中
-【交付】LMax-1.20分支已commit(信息:Fix JEI 15.62 compatibility,含残余风险与根因说明);产物fabric/build/libs/emi-1124.1-SNAPSHOT+1.20.1+fabric.jar(+forge.jar),验收勿用dev-shadow;改面9路径(gradle.properties净回退+jemi 7文件+GOAL-PLAN),.agent_temp_files未入库
-【patch终版】7类18方法:JemiRecipeSlot+3/SlotDrawable+4/Placeable+1/ScrollGrid+1/SlotBuilder+1(setPosition/6带@Override桥方法)/TooltipBuilder+4/TextWidget+5(协变重声明+setTooltipx3);全带注释含[长期记忆:005];残余风险3族(签名引15.56+新类型)记录在GOAL-PLAN+commit信息
-【max回来后】给验收清单:JEI 15.62.0.219实例测①配方转移/填充按钮(原崩溃点)②槽位tooltip③配方浏览回归;若附属插件AME对照3族残余风险
-【待max拍板】路径1升loom全家桶(升完残余风险3族全消+补@Override+jei_version可回bump);.agent_temp_files/.agent/入gitignore确认;PR#1265永久挂起;Steam++可关(GitHub raw通路已绕开,maven直连)
-【技术资产】GOAL-PLAN.md完整作战记录;memory 005=loom墙/JVM描述符分发/桥方法技法/审计脚本教训;maven.blamejared.com sources jar=JEI源码通路
+【任务:改名LMaxs EMI Fork·已全部完成,待Max回来阅读汇报】终态:commit 8e461fe6(4文件更名)+e4ce0c97(GOAL-PLAN任务3章节+勘误,21行)均push;仓库LMaxRouterCN/LMaxs-EMI-Fork;release 1124.2+1.20.1资产已替换为lmaxs-emi-fork-1124.2+1.20.1+{fabric,forge}双jar,title与notes已更名,远端API五断言全绿;GOAL-PLAN标题与工作目录行已修正。本轮零失败零返工(replace引号事故当轮即隔离,零文件污染)。
+【待Max决策三件】①.agent记忆文件被git追踪,gitignore或保留?②authors是否加max名(现保留Emi)③gradle daemon被框架杀致冷启动,GUI控制面板可关。
+【待实机】下载新名jar lmaxs-emi-fork-1124.2+1.20.1+forge.jar验证:CrockPot猪灵以物易物→网格排布/18x18槽框/一次性日志Widget slots from a JEI scroll grid;失败分流:无槽框修JemiSlotTextures,布局错修JemiScrollGridLayout。
+【回退全套】旧jar在本地build/libs;notes与title可edit回;git revert;仓库rename回EMI-Fork。
+【杂物】.agent_temp_files可清(build-rename.log/release-notes中转件/参照clone/jei-src);旧emi-*.jar本地保留作回滚素材。
+【发送纪律】一cmd块一多行指令;read带行号;replace内容禁双引号(走exec);memory与remember内容禁字面指令标识符与尖括号与管道符

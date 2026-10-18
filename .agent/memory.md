@@ -43,3 +43,27 @@ tag: EMI, EMI-Fork, gradle, 构建, 环境, JEI, JVM
 EMI fork 的 JEI 15.62 兼容修复已完成(2026-10-06, LMax-1.20 分支 commit 4cccd7ce): jemi 桥 7 类 18 方法超前实现, 编译对 JEI 15.20.0.102, 普通 public 无 @Override, 协变重声明自动生成桥方法(技法详见 memory 005), 编译与全量 build 双绿, fabric/forge 双平台产物就绪(验收用 build/libs 下非 dev-shadow 的 remapJar 产物)。残余风险 3 族: 签名引用 JEI 15.56 以上新类型(IDrawableWidget 的 6 个 addXXXWidget / setFluidRenderer 第5参 TilingDirection / ITextWidget.setTooltip 回调重载), 15.20 编译面源码级不可写, 仅当 JEI 插件主动调用全新 API 才触发 AME。彻底方案是升 Architectury Loom 到 1.17.20 以上, 等 max 拍板, 完整记录在仓库 GOAL-PLAN.md
 tag: EMI, EMI-Fork, JEI, 项目
 <!-- END:006 -->
+<!-- ID:007 -->
+2026-10-08: max在玩1.20.1 Forge大型整合包(含Create 6.0.8, EMI 1124.1-SNAPSHOT, emi_accelerator 1.0.1, acceleratedrendering, apotheosis, thermal, tconstruct, IE, farmersdelight, epicfight, tacz等)。已诊断出报错根因: emi_accelerator把EmiSearch.bake丢进ForkJoinPool后台线程,与acceleratedrendering注入Font的非线程安全fastutil宽度缓存并发冲突,AIOOBE但不崩溃,仅搜索索引残缺。推荐根治方案是删emi_accelerator。修复选项: 1.删emi_accelerator 2.删acceleratedrendering 3.报上游issue。
+tag: MC整合包环境, 报错诊断, EMI
+<!-- END:007 -->
+<!-- ID:008 -->
+gh CLI 在多 remote 仓库里解析默认仓库的优先顺序是 github > upstream > origin(为 fork 场景设计,裸命令默认指向上游)。emi-Fork 项目里 origin=LMaxRouterCN/EMI-Fork(fork 本体),upstream=emilyploszaj/emi,裸 gh release/issue 命令会打到 upstream——一切 gh 操作必须显式 --repo LMaxRouterCN/EMI-Fork。2026-10-18 亲证:gh release list 显示的是 upstream 的 releases。
+tag: gh, fork, EMI-Fork, 工作流, 教训, 环境
+<!-- END:008 -->
+<!-- ID:009 -->
+gh 多 remote 场景的第二层教训(2026-10-18,承接记忆008):不止"执行"要显式 --repo,"查证"也要——曾用裸 gh release list 看到 upstream 列表,错误推论"fork 上从未发过 1124.1"写进了 release notes("未单独发布,随本版分发"),实际 fork 的 1124.1 早已于 2026-10-07 发布(tag 就是裸的"1124.1",资产名带-SNAPSHOT因为那次没设 RELEASE=1)。规则:关于 fork 仓库状态的任何事实断言,必须来自显式 --repo 的查询输出,不能从裸命令的输出反推"不存在"。EMI-Fork 的 tag 命名由此前版本的不一致:1124.1(裸)vs 1124.2+1.20.1(带MC版本)。
+tag: 教训, gh, fork, EMI-Fork, 工作流
+<!-- END:009 -->
+<!-- ID:010 -->
+exec回执里gh输出的中文出现mojibake(典型形状如淇澶嶆)不代表GitHub远端数据坏:gh CLI内部一律UTF-8,是PowerShell回执管道按GBK误读的显示层问题。判定法(2026-10-18实测有效):用Invoke-RestMethod拉GitHub API原始body,NET层按charset自动解码,再以UTF-8无BOM落盘,最后用read指令读取,全链不经控制台代码页;实测view乱码但API读回与源文件逐字一致,远端干净。附:memory或remember的内容里写字面指令标识符(尤其中文方括号形式的代码块结束标签)会令解析器提前闭合代码块,产生幻影未知指令报错,2026-10-18两次实证;引用标识符一律用英文方括号或纯文字描述。
+tag: 教训, gh, exec, PokerAgent, 工作流, EMI-Fork, 解析器
+<!-- END:010 -->
+<!-- ID:011 -->
+max 的 fork 项目统一命名样式(2026-10-18 确立):显示名格式为 LMaxs + 空格 + 原项目名 + 空格 + Fork,注意 LMaxs 无撇号;编译产物 jar 同步改名(社区惯例全小写连字符);首个应用对象:EMI-Fork 改为 LMaxs EMI Fork。以后 max fork 的任何项目均沿用此模板。红线:mod id 永远保持原值不动,只改显示名/仓库名/文件名这三层皮。
+tag: 用户偏好, 命名, fork, 版本习惯, 项目
+<!-- END:011 -->
+<!-- ID:012 -->
+2026-10-18解析器事故定案:replace指令的code内容含双引号(场景:toml与json的displayName和name字段值本身带引号)会击穿块扫描,级联幻影报错:指令解析失败、缺少参数、内容行泄漏成未知指令、标签截断;当轮三处replace全部未执行(无已替换单据),文件零污染。实证矩阵:exec与remember内容含双引号均多次安全,唯replace致命。规则:凡内容含引号一律走exec的IO.File通道(ReadAllText加Replace加WriteAllText,UTF8无BOM编码器,gradle.properties带BOM会毒化首行key),replace只用于纯净文本。附:回执中指令解析失败声称其后所有内容均未执行不可信,解析器实际按幸存块继续处理,判断真实执行集只认成功单据。
+tag: 解析器, PokerAgent, replace, exec, 教训
+<!-- END:012 -->
