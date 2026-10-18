@@ -136,3 +136,42 @@
   3) 配方浏览回归(确认无副作用)
   4) 若某 JEI 附属插件触发 AME:对照上文残余风险 3 族(该插件用了 15.56+ 全新 API)
 - 残余风险 3 族与路径 1(升 loom 彻底消除)见上文,等 max 拍板
+## 任务2 2026-10-18(JEMI addSlotToWidget 滚动格布局修复,1124.2)
+- bug: JEI 插件用新式工厂 API(addSlotToWidget + IGuiHelper.createScrollGridFactory)
+  产出的配方(如 CrockPot 猪灵以物易物)在 EMI 里所有物品叠在同一个格子 (0,0)
+- 根因: JemiRecipeLayoutBuilder#addSlotToWidget 是 TODO 桩,直接 addSlot(role, 0, 0)
+- 参照: NiButCrazy/EmiScrollGridFix(mixin 方案;本地 clone 于 .agent_temp_files/EmiScrollGridFix-ref)
+  本 fork 的 JEMI 是 EMI 自己的代码,源码级修复,零 mixin
+- 移植范围: 布局 + 槽框;参照的翻页系统/标签页隐藏不做(增强非 bug 本体)
+- 修复设计:
+  1) 新文件 jemi/impl/JemiScrollGridLayout.java: record(x,y,columns,rows) + of(factory)
+     of() = instanceof IScrollGridWidgetFactory -> getArea()(catch Throwable 返 null;
+     区域 null 或宽高小于 18 返 null);rows = max(1, h/18);
+     columns = 反射沿父类链读私有字段 columns(读不到按 max(1,(w-16)/18) 反推,16=滚动条14+padding2)
+  2) 新文件 jemi/impl/JemiSlotTextures.java: 反射取 JEI 标准槽位贴图
+     Class.forName(mezz.jei.common.Internal).getTextures() -> 双名 getSlotDrawable/getSlot
+     (老名优先),方法解析一次缓存且失败粘性,任何 Throwable 返 null(调用方只摆坐标不画框)
+     注: 参照 mod 对全量 JEI jar 编译可直调 Internal;本 fork 对 JEI 只有 API 依赖
+     (modCompileOnly,xplat 零 mezz.jei.common 引用已 grep 证实),必须整链反射
+  3) JemiRecipeLayoutBuilder: 实例字段 assignedCounts(IdentityHashMap 按工厂实例记账;
+     builder 每配方新建不复用,5 处 new 全是方法局部变量,已验证);
+     重写 addSlotToWidget: layout 为 null 保持原行为;否则
+     x = left + (index % columns)*18 + 1, y = top + (index / columns)*18(x 轴 +1 是参照实测基线);
+     slot.setBackground(JemiSlotTextures.getSlotBackground(), -1, -1)(贴图拿不到则跳过)
+     用 setBackground 而非 setStandardSlotBackground(): 兼容更早 JEI,mod 自设背景可直接覆盖不叠画
+- 编译面验证(2026-10-18,javap 于 loom-cache 的 15.20.0.102 yarn-remapped jar):
+  IScrollGridWidgetFactory@15.20 存在,getArea() 返回 net.minecraft.client.gui.ScreenRect;
+  yarn 访问器名 getLeft()/getTop()/width()/height();
+  IRecipeSlotBuilder.setBackground(IDrawable,int,int)@15.20 存在;
+  两接口 15.20 起 @Deprecated(forRemoval) -> 方法级 SuppressWarnings("removal")
+- 运行时面(用户 JEI 15.62.0.219): 15.62 的 ScrollGridWidgetFactory 与 15.20 同构
+  (columns/visibleRows 私有 final 字段 + getArea 由 calculateSize 算),反射目标跨版本一致;
+  接口调用经 loom 平台 remap 后二进制链接成立(fabric -> intermediary class_8030;
+  forge -> mojmap navigation.ScreenRectangle;
+  先例: EMI 自家 JemiScrollGridWidget.getScreenRectangle 在双平台工作)
+- 发版: mod_version 1124.1 -> 1124.2;RELEASE=1 gradlew.bat build(fabric+forge 双 jar);
+  commit(排除 .agent) -> push origin LMax-1.20 -> gh release create 1124.2+1.20.1
+  (显式 --repo 指向本 fork 并 --target LMax-1.20,先 git remote -v 防打错仓库;
+  notes 覆盖 1124.1 桥方法 + 1124.2 滚动格两项,1124.1 从未发过 release)
+- 已知限制(写入 release notes): EMI 配方界面无滚动条,超出滚动格可见容量的槽位顺序向下延伸;
+  大标签配方溢出部分不可见
